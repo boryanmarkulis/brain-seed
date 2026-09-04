@@ -1,0 +1,18 @@
+{
+  "owner": "the owner",
+  "mission": "not set yet -- run /onboard",
+  "work": "not set yet -- run /onboard",
+  "voice": "direct, casual, plain words, no corporate tone",
+  "timezone": "UTC",
+  "domains": [],
+  "wiki_scope": "everything the owner has learned or done",
+  "local_model": "qwen3-30b-a3b",
+  "embed_model": "qwen3-embed-4b",
+  "compile_model": "claude-sonnet-4-6",
+  "extract_model": "claude-haiku-4-5-20251001",
+  "compile_provider": "auto",
+  "git_branch": "main",
+  "health_checks": [
+    { "label": "push to GitHub", "ok": "PUSH OK", "fail": "PUSH FAILED" }
+  ]
+}

@@ -1,0 +1,40 @@
+# Grammar for a consolidated wiki page (Stage 2).
+#
+# Deterministically enforces the four structural checks in
+# wiki_consolidate.validate_page that a model otherwise fails at random:
+#   no frontmatter / unterminated frontmatter / frontmatter missing KEY
+#   no h1
+#   body too short
+#   em dash present   (U+2013 and U+2014 are excluded from every body char)
+#
+# Not enforced here, left to validate_page + retry:
+#   invented wikilink(s)  -- would need a 1600-way alternation of live slugs
+#   "--" used as punctuation
+#
+# Two llama.cpp GBNF parser rules, both of which fail as an opaque
+# "failed to parse grammar" 400 on every call:
+#   1. each rule must be on ONE line, no wrapping
+#   2. rule names may not contain an underscore (use a dash)
+
+root ::= frontmatter body
+
+frontmatter ::= "---\n" "type: " ptype "\n" "updated: " date "\n" "sources: [" srclist "]\n" "confidence: " conf "\n---\n"
+
+ptype ::= "concept" | "lesson" | "person" | "playbook"
+conf  ::= "high" | "medium" | "low"
+date  ::= digit digit digit digit "-" digit digit "-" digit digit
+digit ::= [0-9]
+
+srclist ::= src ("," " " src){0,14}
+src     ::= [^,\[\]\n]{3,180}
+
+# Level-1 heading, then at least 200 characters of body so a stub cannot pass.
+body     ::= "# " headline "\n" prose
+headline ::= char{3,120}
+prose    ::= char-nl{200,}
+
+# Every body character except the dashes and smart quotes. The whole existing
+# wiki is straight-quote ASCII (0 curly quotes across it); left free, the MoE
+# emitted 218 of them across 8 pages, which reads as a different author.
+char    ::= [^\n–—’‘“”]
+char-nl ::= [^–—’‘“”]

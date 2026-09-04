@@ -1,0 +1,28 @@
+# Secrets, always
+.env
+.env.local
+*.key
+*.pem
+credentials.json
+token.json
+
+# Machine state, never shared between clones
+.state/
+!.state/.gitkeep
+
+# Local caches
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.DS_Store
+
+# Model artifacts
+*.gguf
+*.npy
+*.npz
+
+# Logs
+*.log
+!log.md

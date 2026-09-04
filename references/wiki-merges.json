@@ -1,0 +1,5 @@
+{
+  "_comment": "Applied by scripts/wiki_merge.py. 'merges' folds duplicate pages into a canonical slug and rewrites every [[link]] that pointed at them. 'renames' fixes a slug that lies about a page whose content is fine. Read both pages before adding a pair.",
+  "merges": {},
+  "renames": {}
+}

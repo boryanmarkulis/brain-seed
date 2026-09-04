@@ -1,0 +1,11 @@
+# Append-only logs and capture files: when local and origin both add lines
+# (e.g. nightly cloud dream agent vs. local session sync), keep BOTH sides
+# automatically instead of failing the rebase/merge with conflict markers.
+# This is the union merge driver built into git. It matches the CLAUDE.md
+# append-only invariant for these paths.
+log.md                  merge=union
+network/log.md          merge=union
+decisions/log.md        merge=union
+daily/**/*.md           merge=union
+.claude/hook-trace.log  merge=union
+journal/**/*.md         merge=union

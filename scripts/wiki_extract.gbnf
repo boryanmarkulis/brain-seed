@@ -1,0 +1,13 @@
+root ::= record{1,14}
+
+record ::= "<<<EXTRACT>>>\n" src cpt typ conf clm evd "<<<END>>>\n"
+
+src  ::= "source: " [0-9]+ "\n"
+cpt  ::= "concept: " slug "\n"
+typ  ::= "type: " ("concept" | "lesson" | "person" | "playbook") "\n"
+conf ::= "confidence: " ("high" | "medium" | "low") "\n"
+clm  ::= "claim: " char{20,220} "\n"
+evd  ::= "evidence: " char{20,240} "\n"
+
+slug ::= [a-z0-9]+ ("-" [a-z0-9]+)*
+char ::= [^\n]

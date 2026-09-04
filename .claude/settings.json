@@ -1,0 +1,103 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(python3 scripts/*)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Read(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Write",
+      "Edit"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 50,
+            "statusMessage": "Syncing Brain from origin...",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/sync.py\" pull"
+          },
+          {
+            "type": "command",
+            "timeout": 5,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/maybe_compile.py\""
+          },
+          {
+            "type": "command",
+            "timeout": 5,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/health_check.py\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 2,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/activator.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 3,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/error_detector.py\""
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 3,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/session_end_post.py\""
+          },
+          {
+            "type": "command",
+            "timeout": 120,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/evolve.py\""
+          },
+          {
+            "type": "command",
+            "timeout": 50,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/sync.py\" push"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual",
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 180,
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/scripts/flush.py\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"${CLAUDE_PROJECT_DIR}/scripts/statusline.sh\""
+  }
+}
